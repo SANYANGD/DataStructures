@@ -1,8 +1,6 @@
-﻿  uic mainwindow.ui
-  moc mainwindow.h
-  exprconv.cpp
+﻿  exprconv.cpp
   mainwindow.cpp
   main.cpp
-D:\SanYang\program\Lab01\Lab01\exprconv.cpp(1,1): warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
+D:\SanYang\program\DataStructures\Lab1\Lab01\exprconv.cpp(1,1): warning C4819: The file contains a character that cannot be represented in the current code page (936). Save the file in Unicode format to prevent data loss
   moc_mainwindow.cpp
-  Lab01.vcxproj -> D:\SanYang\program\Lab01\Debug\Lab01.exe
+  Lab01.vcxproj -> D:\SanYang\program\DataStructures\Lab1\Debug\Lab01.exe
