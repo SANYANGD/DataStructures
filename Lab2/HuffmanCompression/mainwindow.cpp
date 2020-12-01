@@ -1,67 +1,53 @@
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    resize(600,600);
-    setWindowTitle("Sherlock's Compression");
-    com=new Compression();
-    connect(com,&Compression::error,this,&MainWindow::clear);
-    connect(com,SIGNAL(mysignal(double)),this,SLOT(myslot(double)));
+    resize(600,200);
+    setWindowTitle("HuffmanCompression");
+    compression=new Compression();
+    connect(compression,&Compression::error,this,&MainWindow::clear);
+    connect(compression,SIGNAL(mysignal(double)),this,SLOT(myslot(double)));
     ui->progressBar->setMaximum(100);
     ui->progressBar->setMinimum(0);
     ui->progressBar->setValue(0);
     QMenu* pFile=ui->menuBar->addMenu("帮助");
-//    QAction* pNew=pFile->addAction("关于此压缩软件");
-//    connect(pNew,&QAction::triggered,[=]()
-//    {
-//        QMessageBox::about(this,"关于此压缩软件",""
-//                                         "此乃数据结构大作业,余制之于庚子年辛巳月丙子日。该压缩软件可能存在一些Bug(运行过程中可能会卡顿，不要点击，否则可能强退），时间原因无法全面排查，如您在使用过程有所发现，欢迎反馈。");
-//    });
+    QAction* pNew=pFile->addAction("关于");
+    connect(pNew,&QAction::triggered,[=](){QMessageBox::about(this,"关于","G01-Huffman压缩实验");});
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
-    delete com;
+    delete compression;
 }
 
-void MainWindow::clear()
-{
+void MainWindow::clear() {
     ui->lineEdit->clear();
-    path.clear();
+    filepath.clear();
 }
 
-void MainWindow::myslot(double per)
-{
+void MainWindow::myslot(double per) {
     if(per>ui->progressBar->value())
         ui->progressBar->setValue(per);
 }
 
-void MainWindow::on_pushButton_open_clicked()
-{
-    path=QFileDialog::getOpenFileName(this,QString("选择文件"));
-    ui->lineEdit->setText(path);
+void MainWindow::on_pushButton_open_clicked() {
+    filepath=QFileDialog::getOpenFileName(this,QString("选择文件"));
+    ui->lineEdit->setText(filepath);
 }
 
-
-
-void MainWindow::on_pushButton_compression_clicked()
-{
-    com->zip(path);
+void MainWindow::on_pushButton_compression_clicked() {
+    compression->zip(filepath);
     ui->lineEdit->clear();
-    this->path.clear();
+    this->filepath.clear();
     ui->progressBar->setValue(0);
 }
 
-void MainWindow::on_pushButton_decompression_clicked()
-{
-    com->unzip(path);
+void MainWindow::on_pushButton_decompression_clicked() {
+    compression->unzip(filepath);
     ui->lineEdit->clear();
-    this->path.clear();
+    this->filepath.clear();
     ui->progressBar->setValue(0);
 }
 

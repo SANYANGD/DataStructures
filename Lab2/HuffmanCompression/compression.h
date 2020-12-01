@@ -1,3 +1,4 @@
+
 #ifndef COMPRESSION_H
 #define COMPRESSION_H
 
@@ -14,8 +15,7 @@
 
 using namespace std;
 
-struct HuffmanTreeNode
-{
+struct HuffmanTreeNode {
     pair<unsigned char, int>Weight;
     string zippassword;
     HuffmanTreeNode* leftson;
@@ -24,13 +24,15 @@ struct HuffmanTreeNode
 };
 
 
-class Compression : public QMainWindow
-{
+class Compression : public QMainWindow {
+
     Q_OBJECT
+
 public:
     explicit Compression(QWidget *parent = nullptr);
     void zip(QString path);
     void unzip(QString path);
+
 protected:
     void DEL(HuffmanTreeNode*& root);
     void BinaryString_Init();
@@ -39,6 +41,7 @@ protected:
     void HuffmanTreeVector_Init();
     void HuffmanTree_Init();
     void ZipPassword_Init(HuffmanTreeNode* &root, string& password);
+
 private:
     map<unsigned char, int> weightmap;
     map<unsigned char, string>passwordmap;
@@ -46,10 +49,13 @@ private:
     string binary_string;
     vector<HuffmanTreeNode* > container;
     map<string, int> zippassword;
+
 signals:
     void error();
     void mysignal(double per);
+
 public slots:
+
 };
 
 #endif // COMPRESSION_H
