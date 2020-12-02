@@ -20,7 +20,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>待操作文件路径：</string>
+         <string>选择文件：</string>
         </property>
        </widget>
       </item>
