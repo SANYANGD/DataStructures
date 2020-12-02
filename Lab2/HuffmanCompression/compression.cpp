@@ -133,6 +133,7 @@ void Compression::zip(QString fpath) {
          emit error();
          return;
      }
+
      //权重映射初始化
      weightMapInit(openfile);
      //更新进度条
@@ -142,11 +143,12 @@ void Compression::zip(QString fpath) {
      emit mysignal(20);
      HTInit();//构建哈夫曼树
      emit mysignal(30);
-     string empty="";
-     zipPWInit(container[0],empty);//哈夫曼编码映射初始化
+     string em="";
+     zipPWInit(container[0],em);//哈夫曼编码映射初始化
      emit mysignal(40);
      binStringInit();//获取二进制串
      emit mysignal(50);
+
      fpath+=".hfc";//压缩后的文件格式后缀
      openfile.close();//关闭openfile
      QFile savefile(fpath);//创建新的Qfile进行压缩文件的写入
@@ -154,19 +156,18 @@ void Compression::zip(QString fpath) {
      QDataStream out(&savefile);//利用QdataStream操作
      int size = pwMap.size();
          if (size == 256) size = 0;//因为256无法用一个字节保存
-         int length = 0;
          out<<size;//传入哈夫曼编码映射数量
-         length++;
+
          double k=1;
          for (map<unsigned char, string>::iterator it = pwMap.begin(); it != pwMap.end(); it++) {
              emit mysignal(50+double(25*k++)/pwMap.size());
              int first = it->first;
              out<<first;//传入key值
-             length++;
+
              string second = it->second;
              int size = second.size();
              out<<size;//传入value值的长度
-             length++;
+
              int n = 8 - second.size() % 8;
              if (n) {
                  second.append(n, '0');//补0
@@ -176,26 +177,26 @@ void Compression::zip(QString fpath) {
                  int temp = binToInt(k);
                  unsigned char ch = temp;
                  out<<ch;//传入value值
-                 length++;
+
              }
          }
          int n = 8 - binString.size() % 8;
          if (n) {
              binString.append(n, '0');
          }
-         length++;
+
          int totalbitsize = binString.size() / 8;
          for (int i = 0; i < binString.size(); i += 8) {
              emit mysignal(75+double(25*i)/binString.size());
              string k = binString.substr(i, 8);
-             int temp = binToInt(k);
-             unsigned char ch = temp;
+             int t = binToInt(k);
+             unsigned char ch = t;
              out<<ch;//分8个字节依次传入
-             length++;
+
          }
-         unsigned char temp=n;
-         out<<temp;//传入补0数量
-         length++;
+         unsigned char t=n;
+         out<<t;//传入补0数量
+
          emit mysignal(100);
          int newlength=savefile.size();
          savefile.close();
@@ -235,8 +236,8 @@ void Compression::unZip(QString fpath) {
     in>>zipmapsize;
     if (zipmapsize == 0) zipmapsize = 256;
     for (int i = 1; i <= zipmapsize; i++) {
-        int zipkey;
-        in>>zipkey;
+        int zkey;
+        in>>zkey;
         int valuelength;
         in>>valuelength;
         string valuestring;
@@ -248,7 +249,7 @@ void Compression::unZip(QString fpath) {
             valuestring += intToBin(zipvalue);
         }
         valuestring.erase(valuelength, valuestring.size() - valuelength + 1);
-        zipPW[valuestring] = zipkey;
+        zipPW[valuestring] = zkey;
     }
     string zipstring;
     while (!in.atEnd()) {
@@ -271,8 +272,8 @@ void Compression::unZip(QString fpath) {
         str += zipstring[i];
         map<string, int>::iterator it = zipPW.find(str);
         if (it != zipPW.end()) {
-            unsigned char temp=it->second;
-            savefile.write(reinterpret_cast<char*>(&temp),1);
+            unsigned char t=it->second;
+            savefile.write(reinterpret_cast<char*>(&t),1);
             str.clear();
         }
     }
