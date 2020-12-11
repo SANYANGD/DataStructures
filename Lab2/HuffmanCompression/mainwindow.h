@@ -2,18 +2,20 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include<QMenu>
-#include<QAction>
-#include<QMainWindow>
-#include<QFileDialog>
+#include <QMenu>
+#include <QAction>
+#include <QMainWindow>
+#include <QFileDialog>
 
-#include"compression.h"
+#include "compression.h"
 
-namespace Ui {
-class MainWindow;
+namespace Ui
+{
+    class MainWindow;
 }
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
 
     Q_OBJECT
 
@@ -32,9 +34,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    Compression* compression; //一个类指针，压缩类
-    QString filepath; //读取文件路径，作为压缩函数和解压缩函数的参数
-    
+    Compression *compression; //一个类指针，压缩类
+    QString filepath;         //读取文件路径，作为压缩函数和解压缩函数的参数
 };
 
 #endif // MAINWINDOW_H
